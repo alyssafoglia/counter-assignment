@@ -1,33 +1,31 @@
-// import necessary react testing library helpers here
-// import the Counter component here
-import { render, screen } from '@testing-library/react';
-import Counter from '../components/Counter';
-
-beforeEach(() => {
-  // Render the Counter component here
-  render(<Counter />);
-})
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import Counter from './Counter';
 
 test('renders counter message', () => {
-  // Complete the unit test below based on the objective in the line above
+  const { getByText } = render(<Counter />);
+  const message = getByText(/Counter:/i);
+  expect(message).toBeInTheDocument();
 });
 
 test('should render initial count with value of 0', () => {
-  // Complete the unit test below based on the objective in the line above
-  const items = await screen.findAllByRole('count')
-  expect(items).toHaveValue(0);
-  const items2 = await screen.findAllByRole('setcount')
-  expect(items).toHaveValue(0);
+  const { getByText } = render(<Counter />);
+  const count = getByText(/Count: 0/i);
+  expect(count).toBeInTheDocument();
 });
 
 test('clicking + increments the count', () => {
-  // Complete the unit test below based on the objective in the line above
-  const items = await screen.findAllByRole('increment')
-  expect(items).toHaveValue('count' + 1);
+  const { getByText } = render(<Counter />);
+  const incrementButton = getByText('+');
+  const count = getByText(/Count: 0/i);
+  fireEvent.click(incrementButton);
+  expect(count).toHaveTextContent('Count: 1');
 });
 
 test('clicking - decrements the count', () => {
-  // Complete the unit test below based on the objective in the line above
-  const items = await screen.findAllByRole('decrement')
-  expect(items).toHaveValue('count' - 1);
+  const { getByText } = render(<Counter />);
+  const decrementButton = getByText('-');
+  const count = getByText(/Count: 0/i);
+  fireEvent.click(decrementButton);
+  expect(count).toHaveTextContent('Count: -1');
 });
